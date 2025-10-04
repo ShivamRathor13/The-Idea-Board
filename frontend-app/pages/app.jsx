@@ -24,7 +24,7 @@ const AppPage = () => {
       toast.success("✅ Idea submitted successfully!");
     } catch (err) {
       console.error(err);
-      alert("Failed to submit idea.");
+      alert("Failed to submit idea, please try again.");
       window.location.reload();
     } finally {
       setSubmitting(false);
