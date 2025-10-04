@@ -2,6 +2,7 @@ const Idea = require("../models/ideaModel");
 
 async function getIdeas(req, res, next) {
   try {
+    await Idea.initializeDB();
     const ideas = await Idea.getAllIdeas();
     res.json(ideas);
   } catch (err) {
@@ -11,6 +12,7 @@ async function getIdeas(req, res, next) {
 
 async function createIdea(req, res, next) {
   try {
+    await Idea.initializeDB();
     const text = req.body.text;
     if (!text) return res.status(400).json({ error: "Text required" });
     const newIdea = await Idea.addIdea(text);
@@ -22,6 +24,7 @@ async function createIdea(req, res, next) {
 
 async function upvoteIdea(req, res, next) {
   try {
+    await Idea.initializeDB();
     const updatedIdea = await Idea.upvoteIdea(req.params.id);
     if (!updatedIdea) return res.status(404).json({ error: "Not found" });
     res.json(updatedIdea);

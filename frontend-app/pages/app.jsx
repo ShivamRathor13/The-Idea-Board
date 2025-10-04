@@ -5,11 +5,14 @@ import useIdeas from "../hooks/userIdeas";
 import * as ideaService from "../services/ideaServices";
 import IdeaCard from "../components/IdeaCard";
 import Loader from "../components/Loader";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AppPage = () => {
   const { ideas, setIdeas, fetchIdeas, loading, error } = useIdeas();
   const [text, setText] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const isMobile = window.innerWidth < 600;
 
   const submit = async () => {
     if (!text.trim()) return;
@@ -18,9 +21,11 @@ const AppPage = () => {
       await ideaService.addIdea(text);
       setText("");
       fetchIdeas();
+      toast.success("✅ Idea submitted successfully!");
     } catch (err) {
       console.error(err);
       alert("Failed to submit idea.");
+      window.location.reload();
     } finally {
       setSubmitting(false);
     }
@@ -42,6 +47,7 @@ const AppPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 relative overflow-hidden">
+      {!isMobile && <ToastContainer position="top-right" autoClose={3000} />}
       {/* Animated Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-10 right-20 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob"></div>

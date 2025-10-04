@@ -3,7 +3,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const ideaRoutes = require("./routes/ideaRoutes");
-const { ensureTableExists } = require("./models/ideaModel");
+const { initializeDB } = require("./models/ideaModel");
 const errorHandler = require("./middleware/errorHandler");
 require("dotenv").config();
 
@@ -22,7 +22,7 @@ app.use(express.json());
 // );
 
 // Ensure table exists before serving requests
-ensureTableExists();
+initializeDB();
 
 // Routes
 app.use("/api/ideas", ideaRoutes);

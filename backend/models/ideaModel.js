@@ -2,8 +2,7 @@ const pool = require("../config/db");
 
 async function ensureTableExists() {
   try {
-    const client = await pool.connect();
-    await client.query(`
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS ideas (
         id SERIAL PRIMARY KEY,
         text TEXT NOT NULL,
@@ -12,13 +11,20 @@ async function ensureTableExists() {
       );
     `);
     console.log("✅ ideas table ready");
-    client.release();
   } catch (err) {
     console.error("❌ Error ensuring table exists:", err.message);
   }
 }
 
+const initializeDB = async () => {
+  try {
+    await ensureTableExists();
+  } catch (err) {
+    console.error("Error initializing database:", err);
+  }
+};
 async function getAllIdeas() {
+  // initializeDB();
   const { rows } = await pool.query(
     "SELECT * FROM ideas ORDER BY created_at DESC"
   );
@@ -41,4 +47,4 @@ async function upvoteIdea(id) {
   return rows[0];
 }
 
-module.exports = { ensureTableExists, getAllIdeas, addIdea, upvoteIdea };
+module.exports = { getAllIdeas, addIdea, upvoteIdea, initializeDB };

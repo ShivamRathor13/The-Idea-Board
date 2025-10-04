@@ -7,4 +7,11 @@ const pool = new Pool({
     "postgresql://postgres:postgres@localhost:5432/postgres",
 });
 
+pool
+  .connect()
+  .then(() => {
+    console.log("Connected to the database");
+  })
+  .catch((err) => console.error("Database connection error:", err.stack));
+
 module.exports = pool;
