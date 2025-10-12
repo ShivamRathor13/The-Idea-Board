@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API = process.env.NEXT_PUBLIC_API_URL || "http://3.26.65.54:4000";
 
 export const getIdeas = async () => {
   const res = await axios.get(`${API}/api/ideas`);
