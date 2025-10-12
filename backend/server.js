@@ -6,6 +6,7 @@ const ideaRoutes = require("./routes/ideaRoutes");
 const { initializeDB } = require("./models/ideaModel");
 const errorHandler = require("./middleware/errorHandler");
 require("dotenv").config();
+const PORT = process.env.PORT || 4000;
 
 const app = express();
 app.use(cors());
@@ -21,9 +22,6 @@ app.use(express.json());
 //   })
 // );
 
-// Ensure table exists before serving requests
-initializeDB();
-
 // Routes
 app.use("/api/ideas", ideaRoutes);
 
@@ -33,5 +31,6 @@ app.get("/", (req, res) => res.send({ status: "ok" }));
 // Error handler middleware
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`🚀 Backend running on port ${PORT}`));
+initializeDB().then(() => {
+  app.listen(PORT, () => console.log(`🚀 Backend running on port ${PORT}`));
+});

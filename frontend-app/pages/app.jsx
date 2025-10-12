@@ -1,6 +1,6 @@
 import "./globals.css";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useIdeas from "../hooks/userIdeas";
 import * as ideaService from "../services/ideaServices";
 import IdeaCard from "../components/IdeaCard";
@@ -12,8 +12,19 @@ const AppPage = () => {
   const { ideas, setIdeas, fetchIdeas, loading, error } = useIdeas();
   const [text, setText] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const isMobile = window.innerWidth < 600;
+  const [isMobile, setIsMobile] = useState(false); // 👈 new state
 
+  useEffect(() => {
+    // Runs only in browser (no SSR)
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 600);
+    };
+
+    handleResize(); // initial check
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   const submit = async () => {
     if (!text.trim()) return;
     try {
